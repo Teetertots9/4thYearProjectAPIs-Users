@@ -1,0 +1,689 @@
+{
+	"info": {
+		"_postman_id": "13d4b831-28d4-4528-aaf6-2ab0734112e0",
+		"name": "users-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "authenticate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c92d7795-3890-4938-99c2-126fb3338253",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return an AuthenticationResult\"] = jsonData.AuthenticationResult !== undefined;",
+									"tests[\"Should return an AccessToken\"] = jsonData.AuthenticationResult.AccessToken !== undefined;",
+									"tests[\"Should return an RefreshToken\"] = jsonData.AuthenticationResult.RefreshToken !== undefined;",
+									"tests[\"Should return an IdToken\"] = jsonData.AuthenticationResult.IdToken !== undefined;",
+									"postman.setEnvironmentVariable(\"id-token\", jsonData.AuthenticationResult.IdToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"{{tester-username}}\",\r\n  \"password\": \"{{tester-password}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{api}}/users/authenticate",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6fb8b3a2-5905-4941-8a2e-10798b2199b3",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return users array\"] = jsonData.Users !== undefined;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/users/",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b03b31f8-0019-41a9-9d09-334d66380bc6",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return user object\"] = jsonData.User !== undefined;",
+									"postman.setEnvironmentVariable(\"username\", jsonData.User.Username);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"testdtcros@traveltechlabs.com\",\n\t\"temporaryPassword\": \"temppassword\"\n}"
+						},
+						"url": {
+							"raw": "{{api}}/users/",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ddeb3b15-702e-42f9-b32a-5d74661eb3c3",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return username\"] = jsonData.Username !== undefined;",
+									"tests[\"Should return user attributes\"] = jsonData.UserAttributes !== undefined;",
+									"tests[\"Should return user create date\"] = jsonData.UserCreateDate !== undefined;",
+									"tests[\"Should return user status\"] = jsonData.UserStatus !== undefined;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/users/{{username}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change user status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b29811d4-50f7-4316-847c-7c65b01eaa46",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return success message\"] = jsonData.Message !== undefined;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"status\": \"disable\"\n}"
+						},
+						"url": {
+							"raw": "{{api}}/users/{{username}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get auth events",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e1636c8d-dcaf-4399-aec7-815d26b3ed4d",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return auth events array\"] = jsonData.AuthEvents !== undefined;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/users/{{username}}/auth-events",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"{{username}}",
+								"auth-events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ddeb3b15-702e-42f9-b32a-5d74661eb3c3",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return group\"] = jsonData.Group !== undefined;",
+									"postman.setEnvironmentVariable(\"group\", jsonData.Group.GroupName);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"test-group\"\n}"
+						},
+						"url": {
+							"raw": "{{api}}/users/groups/",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"groups",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ddeb3b15-702e-42f9-b32a-5d74661eb3c3",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return groups array\"] = jsonData.Groups !== undefined;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/users/groups/",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"groups",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add user to group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b29811d4-50f7-4316-847c-7c65b01eaa46",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return success message\"] = jsonData.Message !== undefined;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{api}}/users/groups/{{group}}/{{username}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"groups",
+								"{{group}}",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ddeb3b15-702e-42f9-b32a-5d74661eb3c3",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return users array\"] = jsonData.Users !== undefined;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/users/groups/{{group}}/",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"groups",
+								"{{group}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove from group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3dddd3b9-7517-4915-98dd-01a6af062045",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return success message\"] = jsonData.Message !== undefined;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/users/groups/{{group}}/{{username}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"groups",
+								"{{group}}",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3dddd3b9-7517-4915-98dd-01a6af062045",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return success message\"] = jsonData.Message !== undefined;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/users/groups/{{group}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"groups",
+								"{{group}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3dddd3b9-7517-4915-98dd-01a6af062045",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code should equal 200\"] = responseCode.code === 200;",
+									"tests[\"Should not return error message\"] = jsonData.errorMessage === undefined;",
+									"tests[\"Should return success message\"] = jsonData.Message !== undefined;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{id-token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/users/{{username}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Folder for users"
+		}
+	]
+}
